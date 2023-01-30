@@ -5,10 +5,12 @@ import Navbar from "../../Components/Navbar";
 
 const Home = () => {
   return (
-    <div key='' className="min-h-screen flex flex-col">
+    <div key='' className="min-h-screen flex flex-col" style={{backgroundImage:`url("https://pbs.twimg.com/media/FVPNQbOWYAEzDfn?format=jpg&name=4096x4096")`,backgroundPosition: "15% 85%",backgroundSize:'cover'}}>
+      <div>
       <Navbar/>
       <Content/>
-    <div key='' className="mt-auto">
+      </div>
+    <div key='' className="h-1/6 mt-auto">
       <Footer/>
       </div>
     </div>
