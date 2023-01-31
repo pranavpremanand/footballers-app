@@ -14,18 +14,18 @@ const Content = () => {
 
   const getPlayers = (prefix) => {
     if (prefix !== "") {
-      setTimeout(() => {
-        axios
-          .get(
-            `https://www.thesportsdb.com/api/v1/json/3/searchplayers.php?p=${prefix}`
-          )
-          .then((response) => {
-            const footballers = response.data.player.filter(
-              (player) => player.strSport === "Soccer" && player.strCutout
-            );
+      axios
+        .get(
+          `https://www.thesportsdb.com/api/v1/json/3/searchplayers.php?p=${prefix}`
+        )
+        .then((response) => {
+          const footballers = response.data.player.filter(
+            (player) => player.strSport === "Soccer" && player.strCutout
+          );
+          setTimeout(() => {
             setPlayers(footballers);
-          });
-      }, 1000);
+          }, 1000);
+        });
     } else {
       setPlayers([]);
     }
@@ -49,10 +49,10 @@ const Content = () => {
 
   return (
     <div className="">
-        <div className="max-w-screen">
-          <h6 className="header max-w-sm">More updates will come soon...</h6>
-        </div>
-      <div className="h-5/6 flex justify-center py-8">
+      <div className="max-w-screen">
+        <h6 className="header max-w-sm">More updates will come soon...</h6>
+      </div>
+      <div className="flex justify-center py-8">
         <div className="flex justify-center md:justify-evenly flex-wrap m-2">
           <div className="md:basis-1/4 mb-5 justify-self-center">
             <h5 className="text-stroke text-start italic text-white">
@@ -68,7 +68,7 @@ const Content = () => {
               required
             />
             {players ? (
-              <div className="no-scrollbar w-80 max-h-80 md:w-80 overflow-scroll scroll-hidden display-none rounded dark:bg-white-800 bg-white px-2 ring-1 ring-slate-900/5 shadow-xl">
+              <div className="no-scrollbar w-80 max-h-64 md:w-80 overflow-scroll scroll-hidden display-none rounded dark:bg-white-800 bg-white px-2 ring-1 ring-slate-900/5 shadow-xl">
                 {players.map((player) => {
                   return (
                     <div
