@@ -49,10 +49,10 @@ const Content = () => {
 
   return (
     <>
-      <div className="max-w-screen">
+      <div className="flex justify-center">
         <h6 className="header max-w-sm">More updates will come soon...</h6>
       </div>
-      <div className="flex justify-center py-8">
+      <div className="flex justify-center py-2">
         <div className="flex justify-center md:justify-evenly flex-wrap m-2">
           <div className="md:basis-1/4 mb-5 justify-self-center">
             <h5 className="text-stroke text-start italic text-white">
