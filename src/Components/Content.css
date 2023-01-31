@@ -4,10 +4,10 @@
 }
 @keyframes moveHeader {
     from {
-      transform: translateX(-50%);
+      transform: translateX(0%);
     }
     to {
-      transform: translateX(235%);
+      transform: translateX(100%);
     }
   }
   

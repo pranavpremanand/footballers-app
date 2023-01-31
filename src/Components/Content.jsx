@@ -48,7 +48,7 @@ const Content = () => {
   //   };
 
   return (
-    <div className="">
+    <>
       <div className="max-w-screen">
         <h6 className="header max-w-sm">More updates will come soon...</h6>
       </div>
@@ -132,7 +132,7 @@ const Content = () => {
           )}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
