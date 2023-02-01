@@ -27,7 +27,7 @@ const Content = () => {
               (player) => player.strSport === "Soccer"
               // && player.strCutout
             );
-            console.log(footballers);
+            // console.log(footballers);
             setPlayers(footballers);
           })
           .catch((err) => {
@@ -160,12 +160,6 @@ const Content = () => {
                     <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
                       Nationality : {player.strNationality}
                     </div>
-
-                    {/* <a
-                    href="#"
-                    className="block mt-1 text-lg leading-tight font-medium text-black hover:underline"
-                  >
-                  </a> */}
                     <p className="mt-2 text-slate-500 text-start no-scrollbar max-h-64  overflow-scroll scroll-hidden display-none">
                       {player.strDescriptionEN}
                     </p>
