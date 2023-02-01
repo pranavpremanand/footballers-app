@@ -6,6 +6,7 @@ const Content = () => {
   const inputRef = useRef();
   const [player, setPlayer] = useState(null);
   const [players, setPlayers] = useState([]);
+  const [desc, setDesc] = useState(true);
   //   const [leagues,setLeagues] = useState([])
   useEffect(() => {
     inputRef.current.focus();
@@ -13,24 +14,32 @@ const Content = () => {
   }, []);
 
   const getPlayers = (prefix) => {
+    setDesc(false);
     if (prefix !== "") {
-      axios
-        .get(
-          `https://www.thesportsdb.com/api/v1/json/3/searchplayers.php?p=${prefix}`
-        )
-        .then((response) => {
-          const footballers = response.data.player.filter(
-            (player) => player.strSport === "Soccer" && player.strCutout
-          );
-          setTimeout(() => {
+      setTimeout(() => {
+        axios
+          .get(
+            `https://www.thesportsdb.com/api/v1/json/3/searchplayers.php?p=${prefix}`
+          )
+          .then((response) => {
+            const footballers = response.data.player.filter(
+              (player) => player.strSport === "Soccer"
+              // && player.strCutout
+            );
+            console.log(footballers);
             setPlayers(footballers);
-          }, 1000);
-        });
+          })
+          .catch((err) => {
+            // Error handler
+          });
+      }, 1000);
     } else {
       setPlayers([]);
+      setPlayer(null);
     }
   };
   const getPlayerData = (id) => {
+    setPlayer(null);
     const data = players.find((player) => player.idPlayer === id);
     setPlayer(data);
   };
@@ -49,9 +58,11 @@ const Content = () => {
 
   return (
     <>
-      <div className="flex justify-center">
-        <h6 className="header max-w-sm">More updates will come soon...</h6>
-      </div>
+      {desc && (
+        <div className="flex justify-center">
+          <h6 className="header max-w-sm">More updates will come soon...</h6>
+        </div>
+      )}
       <div className="flex justify-center py-2">
         <div className="flex justify-center md:justify-evenly flex-wrap m-2">
           <div className="md:basis-1/4 mb-5 justify-self-center">
@@ -63,7 +74,7 @@ const Content = () => {
               onChange={(e) => getPlayers(e.target.value)}
               type="text"
               id="player_name"
-              className="bg-gray-50 border-none w-80 p-3 mb-2 placeholder:italic max-h-96 md:w-80 border placeholder:text-gray-900 border-gray-300 text-md rounded-lg shadow-sm focus:outline-none focus:ring-1 sm:text-sm md:text-md lg:text-lg focus:ring-gray-900 focus:border-blue-500 block dark:bg-gray-100 dark:border-gray-600 dark:placeholder-gray-500 dark:text-dark dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="bg-gray-50 border-none w-80 p-3 mb-2 placeholder:italic max-h-96 md:w-80 border placeholder:text-gray-600 border-gray-300 text-md rounded-lg shadow-sm focus:outline-none focus:ring-1 sm:text-sm md:text-md lg:text-lg focus:ring-gray-900 focus:border-blue-500 block dark:bg-gray-100 dark:border-gray-600 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Lionel Messi..."
               required
             />
@@ -75,11 +86,19 @@ const Content = () => {
                       onClick={() => getPlayerData(player.idPlayer)}
                       className="w-[100%] p-1 flex m-1 cursor-pointer items-center gap-3 bg-slate-300 rounded-xl"
                     >
-                      <img
-                        class="inline-block h-12 w-12 rounded-full ring-2 ring-white"
-                        src={player.strCutout}
-                        alt=""
-                      />
+                      {player.strCutout ? (
+                        <img
+                          className="inline-block h-12 w-12 rounded-full ring-2 ring-white"
+                          src={player.strCutout}
+                          alt=""
+                        />
+                      ) : (
+                        <img
+                          className="inline-block rounded-full h-12 w-12 ring-2 object-fit"
+                          src="https://cdn.pixabay.com/photo/2013/07/13/10/44/man-157699__340.png"
+                          alt=""
+                        />
+                      )}
                       <h6 className="concat">{player.strPlayer}</h6>
                     </div>
                   );
@@ -89,24 +108,30 @@ const Content = () => {
           </div>
           {player && (
             <div className="sm:basis-full md:basis-2/4">
-              <div className=" mx-auto bg-white rounded-xl shadow-md overflow-hidden ">
+              <div className="mx-auto bg-white rounded-xl shadow-md overflow-hidden ">
                 <div className=" dark:bg-slate-200">
-                  <div className="md:shrink-0">
-                    {player.strFanart2 ? (
+                  <div className="md:shrink-0 pt-5">
+                    {player.strFanart1 ? (
                       <img
-                        className="w-full max-h-56 sm:object-cover md:h-full"
-                        src={player.strFanart2}
+                        className="w-full max-h-72 sm:object-contain md:h-full"
+                        src={
+                          player.strThumb
+                            ? player.strThumb
+                            : player.strFanart3
+                            ? player.strFanart3
+                            : player.strFanart1
+                        }
                         alt=""
                       />
                     ) : player.strCutout ? (
                       <img
-                        className="w-full max-h-56 object-contain md:h-full"
+                        className="w-full max-h-72 object-contain md:h-full"
                         src={player.strCutout}
                         alt=""
                       />
                     ) : (
                       <img
-                        className="w-full max-h-56 object-fit md:h-full"
+                        className="w-full max-h-72 object-contain md:h-full"
                         src="https://cdn.pixabay.com/photo/2013/07/13/10/44/man-157699__340.png"
                         alt=""
                       />
@@ -115,8 +140,12 @@ const Content = () => {
                   <div className="p-4">
                     <h1 className="text-bold text-2xl">{player.strPlayer}</h1>
                     <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
-                      {player.strTeam}
+                      Club : {player.strTeam}
                     </div>
+                    <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
+                      Nationality : {player.strNationality}
+                    </div>
+
                     {/* <a
                     href="#"
                     className="block mt-1 text-lg leading-tight font-medium text-black hover:underline"
