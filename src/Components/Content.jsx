@@ -22,7 +22,7 @@ const Content = () => {
             `https://www.thesportsdb.com/api/v1/json/3/searchplayers.php?p=${prefix}`
           )
           .then((response) => {
-            const footballers = response.data.player.filter(
+            let footballers = response.data.player.filter(
               (player) => player.strSport === "Soccer"
               // && player.strCutout
             );
@@ -39,6 +39,7 @@ const Content = () => {
     }
   };
   const getPlayerData = (id) => {
+    setPlayers([]);
     setPlayer(null);
     const data = players.find((player) => player.idPlayer === id);
     setPlayer(data);
