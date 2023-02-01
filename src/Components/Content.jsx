@@ -5,6 +5,7 @@ import "./Content.css";
 const Content = () => {
   const inputRef = useRef();
   const [player, setPlayer] = useState(null);
+  const[playerName,setPlayerName]=useState('')
   const [players, setPlayers] = useState([]);
   const [desc, setDesc] = useState(true);
   //   const [leagues,setLeagues] = useState([])
@@ -13,13 +14,13 @@ const Content = () => {
     // getLeagues();
   }, []);
 
-  const getPlayers = (prefix) => {
+  const getPlayers = async (prefix) => {
+    setPlayerName(prefix)
     setDesc(false);
     if (prefix !== "") {
-      setTimeout(() => {
         axios
           .get(
-            `https://www.thesportsdb.com/api/v1/json/3/searchplayers.php?p=${prefix}`
+            `https://www.thesportsdb.com/api/v1/json/3/searchplayers.php?p=${playerName}`
           )
           .then((response) => {
             let footballers = response.data.player.filter(
@@ -32,7 +33,18 @@ const Content = () => {
           .catch((err) => {
             // Error handler
           });
-      }, 1000);
+      // axios
+      //   .get(
+      //     `https://en.wikipedia.org/w/api.php?action=query&origin=*&format=json&generator=search&gsrnamespace=0&gsrlimit=5&gsrsearch='${prefix}'`
+      //   )
+      //   .then((response) => {
+      //     console.log('Wiki data',response.data);
+      //     const data = JSON.parse(response.data)
+      //     console.log(data,'data')
+      //   })
+      //   .catch((err) => {
+      //     //handle error
+      //   });
     } else {
       setPlayers([]);
       setPlayer(null);
@@ -42,6 +54,7 @@ const Content = () => {
     setPlayers([]);
     setPlayer(null);
     const data = players.find((player) => player.idPlayer === id);
+    setPlayerName(data.strPlayer)
     setPlayer(data);
   };
   //   const getLeagues = async () => {
@@ -75,6 +88,7 @@ const Content = () => {
               onChange={(e) => getPlayers(e.target.value)}
               type="text"
               id="player_name"
+              value={playerName}
               className="bg-gray-50 border-none w-80 p-3 mb-2 placeholder:italic max-h-96 md:w-80 border placeholder:text-gray-600 border-gray-300 text-md rounded-lg shadow-sm focus:outline-none focus:ring-1 sm:text-sm md:text-md lg:text-lg focus:ring-gray-900 focus:border-blue-500 block dark:bg-gray-100 dark:border-gray-600 dark:placeholder-gray-400 dark:text-dark dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Lionel Messi..."
               required
@@ -111,7 +125,7 @@ const Content = () => {
             <div className="sm:basis-full md:basis-2/4">
               <div className="mx-auto bg-white rounded-xl shadow-md overflow-hidden ">
                 <div className=" dark:bg-slate-200">
-                  <div className="md:shrink-0 pt-5">
+                  <div className="md:shrink-0">
                     {player.strFanart1 ? (
                       <img
                         className="w-full max-h-72 sm:object-contain md:h-full"
